@@ -64,7 +64,6 @@ router.post('/SendMessage', function (req, res, next) {
   });
 });
 
-
 // Login api call
 router.post('/login', function (req, res, next) {
   let userData = {
