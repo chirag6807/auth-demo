@@ -48,14 +48,14 @@ router.post('/SendMessage', function (req, res, next) {
     var request = new sql.Request();
     let sqlQuery = '';
     if (req.body.imageBaseData == null) {
-      sqlQuery = `INSERT INTO Message(From_User_Id, To_User_Id, Message) 
-  VALUES('${req.body.fromUserId}','${req.body.toUserId}','${req.body.message}')`
+      sqlQuery = `INSERT INTO Message(From_User_Id, To_User_Id, Message,IsRead) 
+  VALUES('${req.body.fromUserId}','${req.body.toUserId}','${req.body.message}','false')`
     }
     else {
-      sqlQuery = `INSERT INTO Message(From_User_Id, To_User_Id, Message,ImageBaseData,FileName,FileType,IsFile) 
-  VALUES('${req.body.fromUserId}','${req.body.toUserId}','${req.body.message}','${req.body.imageBaseData}','${req.body.fileName}','${req.body.fileType}','${req.body.isFile}')`
+      sqlQuery = `INSERT INTO Message(From_User_Id, To_User_Id, Message,ImageBaseData,FileName,FileType,IsFile,IsRead) 
+  VALUES('${req.body.fromUserId}','${req.body.toUserId}','${req.body.message}','${req.body.imageBaseData}','${req.body.fileName}','${req.body.fileType}','${req.body.isFile}','false')`
     }
-
+    console.log(sqlQuery);
     request.query(sqlQuery, function (err, result) {
       if (err) console.log(err)
       console.log("Data added succesfully.");
@@ -63,6 +63,20 @@ router.post('/SendMessage', function (req, res, next) {
     });
   });
 });
+
+router.post('/ReadMessage', function (req, res, next) {
+  sql.connect(dbconfig.config, function (err) {
+    if (err) console.log(err);
+    var request = new sql.Request();
+    let sqlQuery = `UPDATE Message SET IsRead = 1 WHERE From_User_Id = ${req.body.fromUserId} and To_User_Id = ${req.body.toUserId}`
+    console.log(sqlQuery);
+    request.query(sqlQuery, function (err, result) {
+      if (err) console.log(err)
+      res.send("Data updated succesfully.");
+    });
+  });
+});
+
 
 // Login api call
 router.post('/login', function (req, res, next) {

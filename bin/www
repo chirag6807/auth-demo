@@ -12,7 +12,7 @@ var http = require('http');
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '3001');
 app.set('port', port);
 
 /**
@@ -38,8 +38,24 @@ io.on('connection', (socket) => {
   });
 
   socket.on('my message', (msg) => {
-    io.emit('my broadcast', `server: ${msg}`);
+    io.emit('my broadcast', {msg});
   });
+
+  // socket.on("message_sent", function (data) {
+  //   io.emit("message_sent_correctly", { msc: data.sentuserid });
+  //   //it sends back to all users (includes sender) the sender's id 
+  // });
+
+  // socket.on("check_id", function (data) {
+  //   if (data.ci === 10) {
+
+
+  //     //message read flag =true
+  //     console.log("display flsg read message.")
+  //     socket.emit("id_checked");
+  //   }
+  //   //if id equals to sender's id returns to index.html that the message has been sent successfully
+  // });
 
 });
 
